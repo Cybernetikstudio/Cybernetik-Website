@@ -1,0 +1,51 @@
+const q=s=>document.querySelector(s);
+const industry={moving:['Removal services','The right crew.<br>The right truck.<br>Every move accounted for.','Connect the booking, crew availability, vehicle assignment and deposit status before the first truck leaves.',['Match crews to vehicles','Flag missing drivers','Check deposits before dispatch']],cleaning:['Commercial cleaning','Every location.<br>Every shift.<br>A clear record of the work.','Bring recurring visits, staff cover and site instructions together. Keep quality checks attached to the work.',['Schedule recurring visits','Arrange cover for absences','Record location quality checks']],hvac:['HVAC installation & maintenance','Every installation.<br>Every service visit.<br>The history in one place.','Plan maintenance around customer equipment, technician qualifications and the parts needed for the visit.',['Track service history','Assign qualified technicians','Prepare parts for return visits']],electrical:['Electrical installation','From site survey<br>to inspection.<br>Keep the job connected.','Keep surveys, agreed work, materials and completion records connected across office and field teams.',['Prepare job requirements','Coordinate materials and teams','Collect inspection records']],plumbing:['Plumbing & sanitary services','An urgent call.<br>A clear assignment.<br>A documented repair.','Turn a customer request into a visit with the right information. Keep extra work, parts and follow-up visits together.',['Dispatch urgent work','Approve additional charges','Record parts and completed repairs']],maintenance:['Painting & building maintenance','Multiple sites.<br>Changing schedules.<br>One working plan.','Coordinate work across buildings and teams, with clear scope, progress records and customer handovers.',['Sequence work across sites','Record progress and defects','Prepare handover reports']]};
+document.querySelectorAll('[data-industry]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-industry]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b)});const d=industry[b.dataset.industry];q('#industry-kicker').textContent=d[0];q('#industry-title').innerHTML=d[1];q('#industry-description').textContent=d[2];q('#industry-checks').replaceChildren(...d[3].map((t,i)=>{const s=document.createElement('span');s.textContent=t;return s}));q('#business').selectedIndex=['moving','cleaning','hvac','electrical','plumbing','maintenance'].indexOf(b.dataset.industry)}));
+document.querySelectorAll('.operation-list details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)document.querySelectorAll('.operation-list details').forEach(x=>{if(x!==d)x.open=false})}));
+q('#contact-form').addEventListener('submit',e=>{e.preventDefault();const subject='Cybernetik early adopter pilot — '+q('#business').value;const body='Hi Tijn,\n\nBusiness type: '+q('#business').value+'\n\nWhat we would like to improve:\n'+q('#workflow').value+'\n\n';window.location.href='mailto:tijn@cybernetik.studio?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body)});
+
+q('#demo-form').addEventListener('submit', async e => {
+ e.preventDefault(); const form=e.currentTarget, button=form.querySelector('button'), status=q('#booking-status');
+ if(!form.reportValidity()) return;
+ button.disabled=true; button.textContent='Sending…'; status.textContent='';
+ try {
+  const response=await fetch('/api/demo-requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:q('#demo-email').value,website:form.elements.website.value})});
+  const data=await response.json(); if(!response.ok) throw new Error(data.error || 'Your request could not be saved. Please try again.');
+  status.textContent='Thank you. Your demo request has been received.'; form.reset();
+ } catch(error) { status.textContent=error.message || 'Unable to connect. Please try again.'; }
+ finally {button.disabled=false;button.innerHTML='Book a demo <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+});
+
+const workflowSteps=['Capture the date, pickup and delivery address.','Confirm the scope, price and customer approval.','Check the deposit before releasing the job.','Match availability, vehicle size and crew skills.','Record hours, photos and customer sign-off.','Prepare the invoice from approved job records.'];
+document.querySelectorAll('[data-workflow-step]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-workflow-step]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button))});q('#workflow-step-detail').textContent=workflowSteps[Number(button.dataset.workflowStep)];}));
+const planningMarkup=q('.workspace-editor-body').innerHTML;
+const paymentMarkup='<div class="mini-workspace-stat"><span>Deposits paid<strong>8/12</strong></span><span>Awaiting deposit<strong>4</strong></span><span>Invoices ready<strong>3</strong></span></div><div class="mini-workspace-table"><div><span>Job</span><span>Deposit</span><span>Balance</span></div><div><b>House removal</b><span>€160 paid</span><em>€640 due</em></div><div><b>Office relocation</b><span>€320 paid</span><em>€1,280 due</em></div><div><b>Storage pickup</b><span>€120 due</span><em>Awaiting</em></div></div>';
+document.querySelectorAll('[data-workspace-view]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-workspace-view]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button))});q('.workspace-editor-body').innerHTML=button.dataset.workspaceView==='planning'?planningMarkup:paymentMarkup;}));
+const lessons={office:['Learn to plan a job',['1 · We show you where everything lives','2 · You assign a crew in the workspace','3 · We check it together and answer questions']],field:['Learn to complete a job',['1 · We walk you through the job screen','2 · You add hours, photos and sign-off','3 · We help until you can do it yourself']]};
+document.querySelectorAll('[data-training]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-training]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button))});const lesson=lessons[button.dataset.training];q('#lesson-title').textContent=lesson[0];q('#lesson-steps').replaceChildren(...lesson[1].map(text=>{const span=document.createElement('span');span.textContent=text;return span}));}));
+
+// Site navigation uses existing content and opens the relevant example.
+document.querySelectorAll('[data-open-operation]').forEach(link=>link.addEventListener('click',()=>{const target=document.querySelector(link.getAttribute('href'));if(target)target.open=true;}));
+document.querySelectorAll('[data-footer-industry]').forEach(link=>link.addEventListener('click',()=>{document.querySelector(`[data-industry="${link.dataset.footerIndustry}"]`)?.click();}));
+const siteHeader=document.querySelector('.site-header');
+const heroSection=document.querySelector('.hero');
+const darkSections=[document.querySelector('#systems'),document.querySelector('.site-footer')];
+let headerFrame=0;
+function updateHeaderTheme(){headerFrame=0;const edge=siteHeader.offsetHeight;const overHero=heroSection.getBoundingClientRect().bottom>edge;const overDark=!overHero&&darkSections.some(section=>{const rect=section.getBoundingClientRect();return rect.top<=edge&&rect.bottom>edge;});siteHeader.classList.toggle('is-over-hero',overHero);siteHeader.classList.toggle('is-over-dark',overDark);}
+function queueHeaderTheme(){if(!headerFrame)headerFrame=requestAnimationFrame(updateHeaderTheme)}
+window.addEventListener('scroll',queueHeaderTheme,{passive:true});window.addEventListener('resize',queueHeaderTheme);updateHeaderTheme();
+
+// Small-screen navigation remains keyboard accessible without a modal overlay.
+const menuButton=q('.menu-toggle'), mainNavigation=q('#main-navigation');
+function closeMobileMenu(returnFocus=false){siteHeader.classList.remove('menu-open');menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');if(returnFocus)menuButton.focus();}
+menuButton.addEventListener('click',()=>{const open=menuButton.getAttribute('aria-expanded')!=='true';siteHeader.classList.toggle('menu-open',open);menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close menu':'Open menu');});
+mainNavigation.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>closeMobileMenu()));
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menuButton.getAttribute('aria-expanded')==='true')closeMobileMenu(true);});
+document.addEventListener('click',event=>{if(!siteHeader.contains(event.target))closeMobileMenu();});
+window.addEventListener('resize',()=>{if(window.innerWidth>760)closeMobileMenu();});
+window.addEventListener('pageshow',queueHeaderTheme);
+
+// Video hero: playback control and reduced-motion preference.
+(()=>{const video=document.querySelector('.hero-video');const button=document.querySelector('.hero-motion');if(!video||!button)return;const sync=()=>{button.textContent=video.paused?'Play video':'Pause video';button.setAttribute('aria-label',video.paused?'Play background video':'Pause background video')};video.addEventListener('play',sync);video.addEventListener('pause',sync);button.addEventListener('click',()=>{if(video.paused)video.play().catch(sync);else video.pause()});const preference=matchMedia('(prefers-reduced-motion: reduce)');if(preference.matches){video.autoplay=false;video.pause()}preference.addEventListener('change',e=>{if(e.matches)video.pause()});sync()})();
+
+(()=>{const hero=document.querySelector('.hero'),button=document.querySelector('.hero-motion');if(!hero||!button||!document.querySelector('.operations-cards'))return;button.addEventListener('click',()=>{const paused=hero.classList.toggle('motion-paused');button.textContent=paused?'Play animation':'Pause animation';button.setAttribute('aria-pressed',String(paused))})})();

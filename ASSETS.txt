@@ -1,0 +1,11 @@
+Hero asset: dist/hero.png
+Created with the built-in image_gen tool, 1 November 2026. Illustrative image, not a photograph of a Cybernetik customer.
+
+Prompt:
+Use case: photorealistic-natural. Asset type: wide website hero photograph, 16:9. Editorial architectural documentary photograph of a small Dutch field-service company's depot at early morning. High oblique viewpoint looking across concrete yard toward long charcoal corrugated industrial workshop with three open bays, two plain cream utility vans, one muted terracotta van, three workers in navy work clothing loading a trolley and equipment. Authentic quiet working moment, no posing, no signage or readable text, no logos. Composition: long building across upper half, vehicles and small people mostly centre-right, broad clean concrete foreground left for website headline overlay. Warm low sun from right, long graphic shadows, soft grey-blue sky, subtle film grain, sophisticated muted neutral palette, realistic 35mm photograph, restrained cinematic detail. No futuristic elements, no UI, no typography. Save image for use as web asset and return local path.
+
+Font: Rubik, served by Google Fonts. Local Arial fallback.
+Reference: Lleverage's public landing page, inspected 1 November 2026; structure and photography-led direction only. Original copy, generated image and implementation.
+Brand reference: existing Cybernetik human-web site, typography and neutral colours. No approved brand documents modified.
+All workspace data and proposed workflow scenarios are illustrative. No live integrations or form submission service.
+Contact CTA opens a prefilled email to tijn@cybernetik.studio, verified from the existing project signature.
