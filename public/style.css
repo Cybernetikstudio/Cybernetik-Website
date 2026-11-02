@@ -313,3 +313,10 @@ html{scroll-padding-top:96px}.skip{z-index:1200}.site-header{position:fixed;top:
 @media(prefers-reduced-motion:reduce){.operations-cards,.workflow-pulse{animation:none!important}.workflow-pulse{display:none}}
 
 @media(max-width:760px){.mobile-hub-lines{overflow:visible}.mobile-hub-lines .everyday-pulse{animation-delay:-.8s}}
+
+/* Clean white cards: spacing replaces decorative rules. */
+.hero .operation-card{background:#fff;border-color:transparent;box-shadow:0 4px 16px rgba(0,0,0,.06);color:#222}
+.hero .operation-tab{border-color:transparent}
+.hero .operation-detail,.hero .operation-route,.hero .operation-card .operation-status{border-top-color:transparent}
+.hero .operation-card p,.hero .operation-detail>span{color:#666}
+.site-header:not(.is-over-hero):not(.is-over-dark){background:#fff;box-shadow:none}
